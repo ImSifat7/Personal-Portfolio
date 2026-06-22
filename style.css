@@ -1,10 +1,154 @@
 :root {
-    --bg-color: #020617;
-    --second-bg-color: #0f172a;
-    --text-color: #f8fafc;
-    --main-color: #06b6d4;
-    --glass-bg: rgba(30, 41, 59, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    --bg-color: #0d0d0d;
+    --second-bg-color: #1a1a1a;
+    --text-color: #f5f5f0;
+    --main-color: #d4af37;
+    --main-glow: rgba(212, 175, 55, 0.3);
+    --glass-bg: rgba(26, 26, 26, 0.7);
+    --glass-border: rgba(212, 175, 55, 0.12);
+}
+
+/* ===== Intro / Opening Scene (premium unboxing) ===== */
+.intro {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    overflow: hidden;
+}
+
+.intro-panel {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background:
+        radial-gradient(120% 90% at 50% 100%, rgba(212, 175, 55, 0.06), transparent 60%),
+        linear-gradient(180deg, #181818 0%, #0b0b0b 100%);
+    transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+    z-index: 1;
+}
+
+.intro-top {
+    top: 0;
+    box-shadow: inset 0 -1px 0 0 rgba(212, 175, 55, 0.45);
+}
+
+.intro-bottom {
+    bottom: 0;
+    background:
+        radial-gradient(120% 90% at 50% 0%, rgba(212, 175, 55, 0.06), transparent 60%),
+        linear-gradient(0deg, #181818 0%, #0b0b0b 100%);
+    box-shadow: inset 0 1px 0 0 rgba(212, 175, 55, 0.45);
+}
+
+/* Glowing gold seal line at the seam */
+.intro-seam {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    transform: translateY(-50%) scaleX(0);
+    transform-origin: center;
+    background: linear-gradient(90deg, transparent, #b8860b 18%, #f5e7a0 50%, #b8860b 82%, transparent);
+    box-shadow: 0 0 30px 3px rgba(212, 175, 55, 0.55);
+    opacity: 0;
+    z-index: 3;
+    animation: seamDraw 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.7s;
+}
+
+.intro-logo {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    text-align: center;
+    transition: opacity 0.45s ease;
+}
+
+/* Name sits just ABOVE the center seam */
+.intro-name {
+    position: absolute;
+    left: 50%;
+    bottom: calc(50% + 1.8rem);
+    font-size: 6rem;
+    font-weight: 800;
+    color: #f5f5f0;
+    letter-spacing: 0.3rem;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translate(-50%, 18px);
+    animation: introFadeUp 0.7s ease forwards 0.15s;
+}
+
+.intro-name span {
+    color: #d4af37;
+}
+
+/* Tagline sits just BELOW the center seam */
+.intro-tag {
+    position: absolute;
+    left: 50%;
+    top: calc(50% + 1.8rem);
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: 0.55rem;
+    text-transform: uppercase;
+    color: #a1a1aa;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translate(-50%, 18px);
+    animation: introFadeUp 0.7s ease forwards 0.45s;
+}
+
+/* Loaded state — seal breaks, lid splits open up & down */
+.intro.loaded .intro-logo {
+    opacity: 0;
+}
+
+.intro.loaded .intro-seam {
+    opacity: 0;
+    box-shadow: 0 0 60px 8px rgba(212, 175, 55, 0.7);
+    transition: opacity 0.5s ease, box-shadow 0.4s ease;
+}
+
+.intro.loaded .intro-top {
+    transform: translateY(-100%);
+}
+
+.intro.loaded .intro-bottom {
+    transform: translateY(100%);
+}
+
+.intro.done {
+    display: none;
+}
+
+@keyframes introFadeUp {
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+@keyframes seamDraw {
+    to {
+        transform: translateY(-50%) scaleX(1);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .intro-name {
+        font-size: 4.2rem;
+        margin-bottom: 2.6rem;
+    }
+
+    .intro-tag {
+        font-size: 1.3rem;
+        letter-spacing: 0.35rem;
+        margin-top: 2.6rem;
+    }
 }
 
 * {
@@ -38,7 +182,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(2, 6, 23, 0.85);
+    background: rgba(13, 13, 13, 0.9);
     /* Heavy dark overlay for readability */
     z-index: -1;
 }
@@ -54,7 +198,7 @@ section {
     left: 0;
     width: 100%;
     padding: 2rem 9%;
-    background: rgba(2, 6, 23, 0.9);
+    background: rgba(13, 13, 13, 0.92);
     backdrop-filter: blur(10px);
     display: flex;
     justify-content: space-between;
@@ -194,7 +338,7 @@ section {
     background-position: top center;
     /* Shade / Transparent Visual: heavily glowing shadow + inset shadow for depth */
     box-shadow:
-        0 0 3rem var(--main-color),
+        0 0 3rem #06b6d4,
         inset 0 0 3rem rgba(0, 0, 0, 0.7);
     border: .2rem solid rgba(6, 182, 212, 0.5);
     /* Semi-transparent border */
@@ -211,7 +355,7 @@ section {
     width: 120%;
     height: 120%;
     border-radius: 50%;
-    background: radial-gradient(circle, var(--main-color), transparent 70%);
+    background: radial-gradient(circle, #06b6d4, transparent 70%);
     opacity: 0.2;
     /* Transparent visual background */
     z-index: -1;
@@ -255,7 +399,7 @@ section {
 
 .stat-item p {
     font-size: 1.6rem;
-    color: #94a3b8;
+    color: #a1a1aa;
 }
 
 /* Services Section */
@@ -318,13 +462,13 @@ section {
     /* Reduced slightly */
     margin-bottom: 2rem;
     /* Adjusted */
-    color: #94a3b8;
+    color: #a1a1aa;
 }
 
 .btn-sm {
     display: inline-block;
     padding: 0.8rem 2rem;
-    background: #1e293b;
+    background: #1a1a1a;
     /* Darker button inside card */
     border-radius: 2rem;
     color: var(--main-color);
@@ -354,8 +498,8 @@ section {
     align-items: center;
     gap: 0.8rem;
     padding: 0.8rem 2rem;
-    background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(139, 92, 246, 0.15));
-    border: 1px solid rgba(6, 182, 212, 0.3);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.15));
+    border: 1px solid rgba(212, 175, 55, 0.3);
     border-radius: 4rem;
     font-size: 1.3rem;
     font-weight: 600;
@@ -373,11 +517,11 @@ section {
 
     0%,
     100% {
-        box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.2);
+        box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.2);
     }
 
     50% {
-        box-shadow: 0 0 20px 5px rgba(6, 182, 212, 0.15);
+        box-shadow: 0 0 20px 5px rgba(212, 175, 55, 0.15);
     }
 }
 
@@ -415,19 +559,19 @@ section {
     left: 0;
     width: 100%;
     height: 3px;
-    background: linear-gradient(90deg, var(--main-color), #8b5cf6, #ec4899);
+    background: linear-gradient(90deg, #b8860b, var(--main-color), #f5e7a0);
 }
 
 .ai-detail-card:hover {
     border-color: var(--main-color);
     transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(6, 182, 212, 0.1);
+    box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
 }
 
 .ai-detail-icon {
     width: 6rem;
     height: 6rem;
-    background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(139, 92, 246, 0.2));
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.2));
     border-radius: 1.5rem;
     display: flex;
     align-items: center;
@@ -448,7 +592,7 @@ section {
 
 .ai-detail-card p {
     font-size: 1.5rem;
-    color: #94a3b8;
+    color: #a1a1aa;
     line-height: 1.8;
 }
 
@@ -487,7 +631,7 @@ section {
 .ai-service-item:hover {
     border-color: var(--main-color);
     transform: translateX(5px);
-    box-shadow: 0 0 15px rgba(6, 182, 212, 0.1);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
 }
 
 .ai-service-item i {
@@ -506,8 +650,8 @@ section {
 .ai-cta {
     text-align: center;
     padding: 4rem 3rem;
-    background: linear-gradient(135deg, rgba(6, 182, 212, 0.08), rgba(139, 92, 246, 0.08));
-    border: 1px solid rgba(6, 182, 212, 0.2);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(212, 175, 55, 0.08));
+    border: 1px solid rgba(212, 175, 55, 0.2);
     border-radius: 2rem;
 }
 
@@ -586,7 +730,7 @@ section {
 
 .edu-box p {
     font-size: 1.4rem;
-    color: #94a3b8;
+    color: #a1a1aa;
 }
 
 .skill-bar {
@@ -607,7 +751,7 @@ section {
 .skill-bar .bar {
     width: 100%;
     height: 1rem;
-    background: #1e293b;
+    background: #1a1a1a;
     border-radius: 1rem;
     position: relative;
     overflow: hidden;
@@ -674,7 +818,7 @@ section {
 .project-card:hover {
     transform: translateY(-10px);
     border-color: var(--main-color);
-    box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
     /* Neon Glow */
 }
 
@@ -716,13 +860,49 @@ section {
 .project-info p {
     font-size: 1.4rem;
     /* Adjusted opacity and size */
-    color: #94a3b8;
+    color: #a1a1aa;
     margin-top: 1rem;
 }
 
 .see-more-container {
     text-align: center;
     margin-top: 4rem;
+}
+
+/* ===== UGC / Content Samples ===== */
+.ugc {
+    background: transparent;
+}
+
+.ugc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.ugc-card {
+    position: relative;
+    border-radius: 2rem;
+    overflow: hidden;
+    border: 1px solid var(--glass-border);
+    background: #000;
+    aspect-ratio: 9 / 16;
+    transition: 0.5s ease;
+}
+
+.ugc-card:hover {
+    border-color: var(--main-color);
+    transform: translateY(-8px);
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+}
+
+.ugc-card video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 /* Footer */
@@ -747,7 +927,7 @@ section {
 
 .footer-col p {
     font-size: 1.6rem;
-    color: #94a3b8;
+    color: #a1a1aa;
     margin-bottom: 1rem;
     /* Added margin */
 }
@@ -760,7 +940,7 @@ section {
 .footer-col input {
     padding: 1rem;
     border-radius: 0.5rem;
-    background: #1e293b;
+    background: #1a1a1a;
     color: #fff;
     width: 100%;
 }
@@ -768,7 +948,7 @@ section {
 .footer-bottom {
     text-align: center;
     padding-top: 2rem;
-    border-top: 1px solid #1e293b;
+    border-top: 1px solid #1a1a1a;
 }
 
 /* Social Media Icons */

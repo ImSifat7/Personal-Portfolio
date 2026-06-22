@@ -1,3 +1,25 @@
+// ===== Intro / Opening Scene =====
+const intro = document.getElementById('intro');
+if (intro) {
+    document.body.style.overflow = 'hidden';
+
+    let introOpened = false;
+    const openSite = () => {
+        if (introOpened) return;
+        introOpened = true;
+        intro.classList.add('loaded');      // panels slide apart
+        setTimeout(() => {
+            intro.classList.add('done');     // remove from layout
+            document.body.style.overflow = '';
+        }, 1250);
+    };
+
+    // Hold for the logo + gold seal reveal, then unbox
+    window.addEventListener('load', () => setTimeout(openSite, 1750));
+    // Fallback in case 'load' already fired
+    setTimeout(openSite, 2700);
+}
+
 // Detect touch device
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
