@@ -1,25 +1,3 @@
-// ===== Intro / Opening Scene =====
-const intro = document.getElementById('intro');
-if (intro) {
-    document.body.style.overflow = 'hidden';
-
-    let introOpened = false;
-    const openSite = () => {
-        if (introOpened) return;
-        introOpened = true;
-        intro.classList.add('loaded');      // panels slide apart
-        setTimeout(() => {
-            intro.classList.add('done');     // remove from layout
-            document.body.style.overflow = '';
-        }, 1250);
-    };
-
-    // Hold for the logo + gold seal reveal, then unbox
-    window.addEventListener('load', () => setTimeout(openSite, 1750));
-    // Fallback in case 'load' already fired
-    setTimeout(openSite, 2700);
-}
-
 // Detect touch device
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
@@ -103,8 +81,22 @@ if (skillsSection) observer.observe(skillsSection);
 const projectCards = document.querySelectorAll('.project-card');
 projectCards.forEach(card => observer.observe(card));
 
-// Observe reveal elements
-const revealElements = document.querySelectorAll('section, .heading, .service-box, .about-container, .contact-links');
+// Staggered cascade: give grid/list items an incremental delay so they arrive one after another
+const staggerContainers = document.querySelectorAll(
+    '.services-container, .ai-automation-content, .ai-grid, .ugc-grid, .stats, .skills-column, .education-column, .footer-content'
+);
+staggerContainers.forEach(container => {
+    Array.from(container.children).forEach((child, i) => {
+        child.style.transitionDelay = (i * 0.09) + 's';
+    });
+});
+
+// Observe reveal elements — animate (almost) everything in on scroll
+const revealElements = document.querySelectorAll(
+    '.heading, .section-desc, .ai-badge, .service-box, .ai-detail-card, .ai-service-item, ' +
+    '.ai-grid-title, .ai-cta, .edu-box, .skill-bar, .ugc-card, .stat-item, .footer-col, ' +
+    '.education-column h3, .skills-column h3, .home-content h1, .home-content h3, .home-content p, .btn-box'
+);
 revealElements.forEach(el => {
     el.classList.add('reveal');
     observer.observe(el);

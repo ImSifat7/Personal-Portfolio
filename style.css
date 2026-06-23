@@ -869,6 +869,16 @@ section {
     margin-top: 4rem;
 }
 
+/* Favorite badge — flow inline on small screens so it never overlaps the title */
+@media (max-width: 600px) {
+    .fav-badge {
+        position: static !important;
+        top: auto !important;
+        right: auto !important;
+        margin-bottom: 1.5rem;
+    }
+}
+
 /* ===== UGC / Content Samples ===== */
 .ugc {
     background: transparent;
